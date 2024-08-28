@@ -2,10 +2,8 @@ const width = 400;
 const height = 400;
 setDocDimensions(width, height);
 
-// Store final lines here
 const finalLines = [];
 
-// Function to generate the Gosper curve L-System sequence
 function generateGosperCurve(iterations) {
   let axiom = 'A';
   const rules = {
@@ -24,7 +22,6 @@ function generateGosperCurve(iterations) {
   return axiom;
 }
 
-// Function to convert the L-System sequence into drawing commands
 function generateCommands(sequence, length, angle) {
   const commands = [];
   for (let char of sequence) {
@@ -44,7 +41,6 @@ function generateCommands(sequence, length, angle) {
   return commands;
 }
 
-// Function to execute the drawing commands
 function drawGosperCurve(commands, startX, startY, startAngle) {
   let x = startX;
   let y = startY;
@@ -67,7 +63,6 @@ function drawGosperCurve(commands, startX, startY, startAngle) {
   finalLines.push(path);
 }
 
-// Function to scale and contain the Gosper curve within the document
 function scaleAndContainPath(path, width, height) {
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   for (let [x, y] of path) {
@@ -89,20 +84,16 @@ function scaleAndContainPath(path, width, height) {
   return path.map(([x, y]) => [x * scale + offsetX, y * scale + offsetY]);
 }
 
-// Randomize parameters
-const iterations = 4;  // Keep the number of iterations consistent to preserve the fractal structure
-const length = Math.random() * 5 + 3;                 // Random length between 3 and 8
-const angle = 60;                                     // Fixed angle for Gosper curve
-const startAngle = Math.random() * 360;               // Random start angle
+const iterations = 4 + Math.floor(Math.random() * 2);
+const baseLength = 5 + Math.random() * 3;
+const baseAngle = 60;
+const startAngle = Math.random() * 360;
 
-// Generate the Gosper curve sequence and commands
 const gosperSequence = generateGosperCurve(iterations);
-const commands = generateCommands(gosperSequence, length, angle);
+const commands = generateCommands(gosperSequence, baseLength, baseAngle);
 drawGosperCurve(commands, 0, 0, startAngle);
 
-// Ensure the curve is contained within the document dimensions
 const scaledPath = scaleAndContainPath(finalLines[0], width, height);
 finalLines[0] = scaledPath;
 
-// Draw it
 drawLines(finalLines);
